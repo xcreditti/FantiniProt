@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Painel de pedidos | Fantini Confeitaria</title>
+<meta name="theme-color" content="#60250D">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧾</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;1,6..96,600&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --amarena:#60250D; --amarena-2:#7A3418; --pistache:#F4A1B0; --chocolate:#60250D;
+  --papel:#FFF6F7; --superficie:#FFFFFF; --linha:#F3D9DE; --texto:#3D1708; --suave:#7A5547;
+  --ok:#1E7A45; --ok-fundo:#E3F2E8; --alerta:#9A5B00; --alerta-fundo:#FBEFD9;
+  --erro:#B42318; --erro-fundo:#FBE4E1; --info:#2F5E8C; --info-fundo:#E2ECF6;
+  --serif:"Bodoni Moda", Didot, Georgia, serif;
+  --sans:"Figtree","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --papel:#1E0F09; --superficie:#2A160E; --linha:#45261A; --texto:#FBEFF1; --suave:#D9BFC4;
+    --amarena:#F4A1B0; --amarena-2:#F7B8C3;
+    --ok:#7CD39C; --ok-fundo:#1E3326; --alerta:#F0C277; --alerta-fundo:#3A2D17;
+    --erro:#FF9C8F; --erro-fundo:#3D1E1B; --info:#9CC3EA; --info-fundo:#1C2A38;
+    color-scheme:dark;
+  }
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:var(--papel);color:var(--texto);font-family:var(--sans);font-size:16px;line-height:1.5;
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--pistache);outline-offset:2px;border-radius:6px}
+[hidden]{display:none!important}
+
+.btn{
+  border:1px solid var(--linha);background:var(--superficie);border-radius:10px;
+  padding:9px 14px;font-weight:600;cursor:pointer;min-height:42px;display:inline-flex;align-items:center;gap:6px;
+  text-decoration:none;
+}
+.btn:hover{border-color:var(--suave)}
+.btn-principal{background:var(--amarena);border-color:var(--amarena);color:#fff}
+@media (prefers-color-scheme: dark){.btn-principal{color:#1B1311}}
+.btn-principal:hover{background:var(--amarena-2)}
+.btn-whats{background:#1E8E4E;border-color:#1E8E4E;color:#fff}
+.btn:disabled{opacity:.5;cursor:wait}
+
+/* Login */
+.login{min-height:100vh;display:grid;place-items:center;padding:20px}
+.login form{background:var(--superficie);border:1px solid var(--linha);border-radius:20px;padding:32px;width:min(380px,100%)}
+.marca{font-family:var(--serif);font-style:italic;font-weight:600;font-size:2rem;color:var(--amarena)}
+.login p{color:var(--suave);margin:4px 0 24px}
+.login label{font-weight:600;font-size:.92rem;display:block;margin-bottom:6px}
+.login input{width:100%;padding:12px 14px;border:1px solid var(--linha);border-radius:10px;background:var(--papel);margin-bottom:16px}
+.login .btn{width:100%;justify-content:center}
+.erro{color:var(--erro);font-size:.9rem;margin-top:12px;min-height:1.3em}
+
+/* Topo */
+.topo{
+  position:sticky;top:0;z-index:20;background:var(--superficie);border-bottom:1px solid var(--linha);
+  padding:calc(10px + env(safe-area-inset-top,0px)) 20px 10px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--superficie)}
+.topo .marca{font-size:1.6rem}
+.topo small{color:var(--suave);display:block;font-size:.82rem}
+.topo-acoes{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+main{padding:20px;max-width:1400px;margin:0 auto}
+
+/* Resumo do dia */
+.resumo{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.resumo div{background:var(--superficie);border:1px solid var(--linha);border-radius:14px;padding:14px 16px}
+.resumo span{color:var(--suave);font-size:.88rem}
+.resumo strong{display:block;font-size:1.6rem;font-family:var(--serif);font-weight:500}
+@media (max-width:760px){.resumo{grid-template-columns:repeat(2,1fr)}}
+
+/* Filtros */
+.barra{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.abas{display:flex;gap:6px;flex-wrap:wrap}
+.aba{border:1px solid var(--linha);background:var(--superficie);border-radius:999px;padding:7px 14px;cursor:pointer;font-weight:500;min-height:40px}
+.aba[aria-pressed="true"]{background:var(--chocolate);color:#fff;border-color:var(--chocolate)}
+@media (prefers-color-scheme: dark){.aba[aria-pressed="true"]{background:var(--texto);color:#1B1311;border-color:var(--texto)}}
+.aba b{font-weight:700;margin-left:4px}
+.busca{flex:1;min-width:200px;padding:10px 14px;border:1px solid var(--linha);border-radius:999px;background:var(--superficie)}
+
+/* Pedidos */
+.lista{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px}
+.pedido{background:var(--superficie);border:1px solid var(--linha);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.pedido.novo{border-color:var(--amarena);box-shadow:0 0 0 2px color-mix(in srgb,var(--amarena) 25%,transparent)}
+.pedido-topo{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.pedido-id{font-family:var(--serif);font-size:1.4rem;font-weight:500;line-height:1}
+.pedido-hora{color:var(--suave);font-size:.85rem}
+.etiquetas{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.etq{font-size:.78rem;font-weight:700;border-radius:999px;padding:3px 10px;white-space:nowrap}
+.etq.ok{background:var(--ok-fundo);color:var(--ok)}
+.etq.alerta{background:var(--alerta-fundo);color:var(--alerta)}
+.etq.erro{background:var(--erro-fundo);color:var(--erro)}
+.etq.info{background:var(--info-fundo);color:var(--info)}
+.etq.neutro{background:var(--papel);color:var(--suave)}
+.cliente{font-weight:600}
+.cliente a{color:inherit}
+.dado a{color:var(--amarena);font-weight:600}
+.dado{font-size:.92rem;color:var(--suave)}
+.dado strong{color:var(--texto);font-weight:600}
+.itens{list-style:none;margin:0;padding:10px 0;border-block:1px dashed var(--linha);font-size:.95rem}
+.itens li{display:flex;justify-content:space-between;gap:10px;padding:2px 0}
+.detalhe-encomenda{font-size:.92rem;background:var(--papel);border-radius:10px;padding:10px}
+.total{display:flex;justify-content:space-between;align-items:baseline}
+.total strong{font-size:1.25rem}
+.acoes{display:flex;gap:6px;flex-wrap:wrap}
+.acoes select{border:1px solid var(--linha);border-radius:10px;background:var(--superficie);padding:8px;min-height:42px}
+.vazio{text-align:center;color:var(--suave);padding:60px 20px;grid-column:1/-1}
+
+.aviso{
+  position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);
+  background:var(--chocolate);color:#fff;padding:12px 18px;border-radius:999px;z-index:50;font-weight:500;
+}
+@media (prefers-color-scheme: dark){.aviso{background:var(--texto);color:#1B1311}}
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<section class="login" id="telaLogin">
+  <form id="formLogin">
+    <div class="marca">Fantini</div>
+    <p>Painel de pedidos</p>
+    <label for="senha">Senha</label>
+    <input type="password" id="senha" autocomplete="current-password" required>
+    <button class="btn btn-principal" id="btnEntrar">Entrar</button>
+    <p class="erro" id="erroLogin" role="alert"></p>
+  </form>
+</section>
+
+<!-- ============ PAINEL ============ -->
+<div id="telaPainel" hidden>
+  <header class="topo">
+    <div>
+      <div class="marca">Fantini</div>
+      <small id="atualizado">Carregando pedidos…</small>
+    </div>
+    <div class="topo-acoes">
+      <button class="btn" id="btnSom" aria-pressed="true">🔔 Som ligado</button>
+      <button class="btn" id="btnAtualizar">Atualizar</button>
+      <button class="btn" id="btnSair">Sair</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="resumo" aria-label="Resumo de hoje">
+      <div><span>Pedidos hoje</span><strong id="rPedidos">0</strong></div>
+      <div><span>Recebido online hoje</span><strong id="rPago">R$ 0</strong></div>
+      <div><span>Para preparar</span><strong id="rPreparar">0</strong></div>
+      <div><span>Encomendas futuras</span><strong id="rEncomendas">0</strong></div>
+    </section>
+
+    <div class="barra">
+      <div class="abas" id="abas" role="group" aria-label="Filtrar pedidos"></div>
+      <input type="search" class="busca" id="busca" placeholder="Buscar por número, nome ou telefone">
+    </div>
+
+    <section class="lista" id="lista" aria-live="polite"></section>
+  </main>
+</div>
+
+<div class="aviso" id="aviso" hidden role="status"></div>
+
+<script>
+/* =========================================================
+   CONFIGURAÇÃO — use a MESMA URL do backend do site
+   ========================================================= */
+const CONFIG = {
+  apiUrl: "",                 // URL do app da web (termina em /exec)
+  nomeLoja: "Fantini Confeitaria",
+  intervaloSegundos: 20       // de quanto em quanto tempo busca pedidos novos
+};
+
+/* ---------------- Estado ---------------- */
+let senha = "";
+let pedidos = [];
+let conhecidos = null;   // ids já vistos (para avisar pedidos novos)
+let destacados = new Set();
+let abaAtual = "andamento";
+let somLigado = true;
+let timer = null;
+
+const $ = s => document.querySelector(s);
+const moeda = v => Number(v || 0).toLocaleString("pt-BR", {style:"currency", currency:"BRL"});
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const hojeISO = () => { const d = new Date(), z = n => String(n).padStart(2,"0"); return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`; };
+
+function aviso(msg){
+  const el = $("#aviso"); el.textContent = msg; el.hidden = false;
+  clearTimeout(aviso.t); aviso.t = setTimeout(() => el.hidden = true, 2800);
+}
+
+async function api(dados){
+  if (!CONFIG.apiUrl) throw new Error("Configure a apiUrl no início do arquivo admin.html.");
+  const r = await fetch(CONFIG.apiUrl, {method:"POST", body: JSON.stringify({...dados, senha})});
+  const j = await r.json();
+  if (!j.ok) throw new Error(j.erro || "Erro ao falar com o servidor.");
+  return j;
+}
+
+/* ---------------- Login ---------------- */
+$("#formLogin").addEventListener("submit", async e => {
+  e.preventDefault();
+  senha = $("#senha").value;
+  $("#btnEntrar").disabled = true;
+  $("#erroLogin").textContent = "";
+  try {
+    await api({acao:"login"});
+    try { sessionStorage.setItem("fantini_admin", senha); } catch(x){}
+    entrar();
+  } catch (err) {
+    $("#erroLogin").textContent = err.message;
+  } finally {
+    $("#btnEntrar").disabled = false;
+  }
+});
+
+function entrar(){
+  $("#telaLogin").hidden = true;
+  $("#telaPainel").hidden = false;
+  if ("Notification" in window && Notification.permission === "default") Notification.requestPermission().catch(()=>{});
+  carregar();
+  clearInterval(timer);
+  timer = setInterval(carregar, CONFIG.intervaloSegundos * 1000);
+}
+
+$("#btnSair").addEventListener("click", () => {
+  try { sessionStorage.removeItem("fantini_admin"); } catch(x){}
+  location.reload();
+});
+
+/* ---------------- Carregar pedidos ---------------- */
+async function carregar(){
+  try {
+    const j = await api({acao:"listarPedidos", limite: 400});
+    const ids = new Set(j.pedidos.map(p => p.id));
+    if (conhecidos){
+      const novos = j.pedidos.filter(p => !conhecidos.has(p.id) && p.status !== "Aguardando pagamento");
+      // pedidos online que acabaram de ser pagos também contam como novos
+      const pagosAgora = j.pedidos.filter(p => conhecidos.has(p.id) && p.status === "Novo" &&
+        (pedidos.find(a => a.id === p.id) || {}).status === "Aguardando pagamento");
+      const avisar = [...novos, ...pagosAgora];
+      if (avisar.length){
+        avisar.forEach(p => destacados.add(p.id));
+        alertarNovos(avisar);
+      }
+    }
+    conhecidos = ids;
+    pedidos = j.pedidos;
+    $("#atualizado").textContent = `Atualizado às ${new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}`;
+    render();
+  } catch (err) {
+    if (/senha/i.test(err.message)){ try { sessionStorage.removeItem("fantini_admin"); } catch(x){} location.reload(); return; }
+    $("#atualizado").textContent = "Sem conexão. Tentando de novo…";
+  }
+}
+
+function alertarNovos(lista){
+  const texto = lista.length === 1 ? `Novo pedido ${lista[0].id} de ${lista[0].nome}` : `${lista.length} pedidos novos`;
+  aviso(texto);
+  document.title = `(${destacados.size}) Painel de pedidos | Fantini`;
+  if (somLigado) tocarSom();
+  if ("Notification" in window && Notification.permission === "granted" && document.hidden){
+    try { new Notification("Fantini Confeitaria", {body: texto}); } catch(e){}
+  }
+}
+
+function tocarSom(){
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [0, .18, .36].forEach((t,i) => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.frequency.value = [880, 1175, 1568][i];
+      g.gain.setValueAtTime(.0001, ctx.currentTime + t);
+      g.gain.exponentialRampToValueAtTime(.3, ctx.currentTime + t + .02);
+      g.gain.exponentialRampToValueAtTime(.0001, ctx.currentTime + t + .16);
+      o.connect(g).connect(ctx.destination);
+      o.start(ctx.currentTime + t); o.stop(ctx.currentTime + t + .18);
+    });
+  } catch(e){}
+}
+
+$("#btnSom").addEventListener("click", () => {
+  somLigado = !somLigado;
+  $("#btnSom").textContent = somLigado ? "🔔 Som ligado" : "🔕 Som desligado";
+  $("#btnSom").setAttribute("aria-pressed", somLigado);
+  if (somLigado) tocarSom();
+});
+$("#btnAtualizar").addEventListener("click", carregar);
+
+/* ---------------- Filtros ---------------- */
+const ABAS = [
+  {id:"andamento", nome:"Em andamento", filtro: p => ["Novo","Em preparo","Pronto"].includes(p.status) && p.tipo !== "encomenda"},
+  {id:"encomendas", nome:"Encomendas", filtro: p => p.tipo === "encomenda" && !["Concluído","Cancelado"].includes(p.status)},
+  {id:"pagamento", nome:"Aguardando pagamento", filtro: p => p.status === "Aguardando pagamento"},
+  {id:"concluidos", nome:"Concluídos", filtro: p => p.status === "Concluído"},
+  {id:"cancelados", nome:"Cancelados", filtro: p => p.status === "Cancelado"},
+  {id:"todos", nome:"Todos", filtro: () => true}
+];
+
+$("#abas").addEventListener("click", e => {
+  const b = e.target.closest("[data-aba]");
+  if (!b) return;
+  abaAtual = b.dataset.aba;
+  render();
+});
+$("#busca").addEventListener("input", render);
+
+/* ---------------- Desenho da tela ---------------- */
+const PROXIMO = {
+  "Novo": {status:"Em preparo", texto:"Começar preparo"},
+  "Em preparo": {status:"Pronto", texto:"Marcar como pronto"},
+  "Pronto": {status:"Concluído", texto:"Concluir"}
+};
+
+function etiquetaStatus(s){
+  const cls = {"Novo":"info","Em preparo":"alerta","Pronto":"ok","Concluído":"neutro","Cancelado":"erro","Aguardando pagamento":"alerta"}[s] || "neutro";
+  return `<span class="etq ${cls}">${esc(s)}</span>`;
+}
+function etiquetaPagamento(s){
+  const cls = {"Pago":"ok","Aguardando":"alerta","Recusado":"erro","Estornado":"erro","A combinar":"neutro"}[s] || "neutro";
+  const texto = s === "A combinar" ? "Pagar na loja" : s;
+  return `<span class="etq ${cls}">${esc(texto)}</span>`;
+}
+
+function render(){
+  // resumo do dia
+  const hoje = hojeISO();
+  const deHoje = pedidos.filter(p => String(p.criadoEm).startsWith(hoje) && p.status !== "Cancelado");
+  $("#rPedidos").textContent = deHoje.filter(p => p.status !== "Aguardando pagamento").length;
+  $("#rPago").textContent = moeda(deHoje.filter(p => p.pagamentoStatus === "Pago").reduce((s,p) => s + p.total, 0));
+  $("#rPreparar").textContent = pedidos.filter(p => ["Novo","Em preparo"].includes(p.status)).length;
+  $("#rEncomendas").textContent = pedidos.filter(ABAS[1].filtro).length;
+
+  // abas com contagem
+  $("#abas").innerHTML = ABAS.map(a => {
+    const n = pedidos.filter(a.filtro).length;
+    return `<button class="aba" data-aba="${a.id}" aria-pressed="${a.id === abaAtual}">${a.nome}${a.id !== "todos" && n ? `<b>${n}</b>` : ""}</button>`;
+  }).join("");
+
+  const termo = $("#busca").value.trim().toLowerCase();
+  const aba = ABAS.find(a => a.id === abaAtual);
+  let lista = pedidos.filter(aba.filtro);
+  if (termo) lista = lista.filter(p => (p.id + " " + p.nome + " " + p.telefone).toLowerCase().includes(termo));
+  if (abaAtual === "encomendas") lista.sort((a,b) => dataRetirada(a) - dataRetirada(b));
+
+  $("#lista").innerHTML = lista.length ? lista.map(cartao).join("") :
+    `<p class="vazio">${termo ? "Nenhum pedido encontrado com essa busca." : "Nenhum pedido aqui por enquanto. Os pedidos novos aparecem sozinhos, com aviso sonoro."}</p>`;
+}
+
+function dataRetirada(p){
+  const m = String(p.retirada).match(/(\d{2})\/(\d{2})\/(\d{4})/);
+  return m ? new Date(`${m[3]}-${m[2]}-${m[1]}`).getTime() : 0;
+}
+
+function cartao(p){
+  const hora = String(p.criadoEm).slice(11, 16);
+  const data = String(p.criadoEm).slice(0, 10).split("-").reverse().join("/");
+  const prox = PROXIMO[p.status];
+  const online = String(p.pagamento).startsWith("Online");
+  const itens = p.tipo === "encomenda"
+    ? `<div class="detalhe-encomenda"><strong>Retirada: ${esc(p.retirada)}</strong><br>${esc(p.detalhes)}</div>`
+    : `<ul class="itens">${(p.itens || []).map(i => `<li><span>${i.qtd}x ${esc(i.nome)}</span><span>${moeda(i.subtotal)}</span></li>`).join("")}
+        ${p.taxaEntrega ? `<li><span>Taxa de entrega</span><span>${moeda(p.taxaEntrega)}</span></li>` : ""}</ul>`;
+
+  return `<article class="pedido ${destacados.has(p.id) ? "novo" : ""}" data-id="${esc(p.id)}">
+    <div class="pedido-topo">
+      <div><div class="pedido-id">${esc(p.id)}</div><div class="pedido-hora">${data} às ${hora}</div></div>
+      <div class="etiquetas">
+        ${p.tipo === "encomenda" ? `<span class="etq info">Encomenda</span>` : ""}
+        ${etiquetaStatus(p.status)} ${etiquetaPagamento(p.pagamentoStatus)}
+      </div>
+    </div>
+    <div>
+      <div class="cliente">${esc(p.nome)}</div>
+      <div class="dado"><a href="https://wa.me/${esc(telefoneWhats(p.telefone))}" target="_blank" rel="noopener">${esc(formatarTelefone(p.telefone))}</a></div>
+      <div class="dado"><strong>${esc(p.recebimento)}</strong>${p.endereco ? `: ${esc(p.endereco)}` : ""}</div>
+      <div class="dado">Pagamento: ${esc(p.pagamento)}</div>
+      ${p.obs ? `<div class="dado">Obs.: ${esc(p.obs)}</div>` : ""}
+    </div>
+    ${itens}
+    <div class="total"><span>${p.tipo === "encomenda" ? "Valor estimado" : "Total"}</span><strong>${moeda(p.total)}</strong></div>
+    <div class="acoes">
+      ${prox ? `<button class="btn btn-principal" data-acao="avancar" data-status="${prox.status}">${prox.texto}</button>` : ""}
+      <a class="btn btn-whats" href="${linkAvisoCliente(p)}" target="_blank" rel="noopener" data-acao="visto">Avisar cliente</a>
+      ${online && p.pagamentoStatus !== "Pago" ? `<button class="btn" data-acao="sincronizar">Verificar pagamento</button>` : ""}
+      <button class="btn" data-acao="imprimir">Imprimir</button>
+      <select data-acao="status" aria-label="Alterar status do pedido ${esc(p.id)}">
+        <option value="">Mudar status…</option>
+        ${["Novo","Em preparo","Pronto","Concluído","Cancelado"].filter(s => s !== p.status).map(s => `<option>${s}</option>`).join("")}
+      </select>
+      ${!online ? `<select data-acao="pagamento" aria-label="Pagamento do pedido ${esc(p.id)}">
+        <option value="">Pagamento…</option>
+        ${["A combinar","Pago"].filter(s => s !== p.pagamentoStatus).map(s => `<option value="${s}">${s === "Pago" ? "Marcar como pago" : "Voltar para a combinar"}</option>`).join("")}
+      </select>` : ""}
+    </div>
+  </article>`;
+}
+
+function telefoneWhats(t){
+  const d = String(t).replace(/\D/g, "");
+  return d.length <= 11 ? "55" + d : d;
+}
+function formatarTelefone(t){
+  let d = String(t).replace(/\D/g, "");
+  if (d.length > 11 && d.startsWith("55")) d = d.slice(2);
+  if (d.length === 11) return `(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`;
+  if (d.length === 10) return `(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`;
+  return t;
+}
+
+function linkAvisoCliente(p){
+  const primeiro = String(p.nome).split(" ")[0];
+  const msgs = {
+    "Novo": `Olá, ${primeiro}! Recebemos seu pedido ${p.id} na ${CONFIG.nomeLoja}. Já vamos preparar.`,
+    "Em preparo": `Olá, ${primeiro}! Seu pedido ${p.id} está sendo preparado.`,
+    "Pronto": p.recebimento === "Entrega"
+      ? `Olá, ${primeiro}! Seu pedido ${p.id} está pronto e já vai sair para entrega.`
+      : `Olá, ${primeiro}! Seu pedido ${p.id} está pronto para retirada na ${CONFIG.nomeLoja}.`,
+    "Concluído": `Olá, ${primeiro}! Obrigado pela preferência. Esperamos que tenha gostado do pedido ${p.id}!`,
+    "Cancelado": `Olá, ${primeiro}. Sobre o seu pedido ${p.id} na ${CONFIG.nomeLoja}:`,
+    "Aguardando pagamento": `Olá, ${primeiro}! Vimos que o pagamento do pedido ${p.id} ainda não foi concluído. Podemos ajudar?`
+  };
+  let msg = msgs[p.status] || `Olá, ${primeiro}!`;
+  if (p.tipo === "encomenda" && p.status === "Novo"){
+    msg = `Olá, ${primeiro}! Recebemos sua encomenda ${p.id} para ${p.retirada}. Valor: ${moeda(p.total)}. Para confirmar, pedimos um sinal de 50% (${moeda(p.total/2)}).`;
+  }
+  return `https://wa.me/${telefoneWhats(p.telefone)}?text=${encodeURIComponent(msg)}`;
+}
+
+/* ---------------- Ações nos pedidos ---------------- */
+$("#lista").addEventListener("click", async e => {
+  const el = e.target.closest("[data-acao]");
+  if (!el || el.tagName === "SELECT") return;
+  const id = el.closest("[data-id]").dataset.id;
+  destacados.delete(id);
+  document.title = destacados.size ? `(${destacados.size}) Painel de pedidos | Fantini` : "Painel de pedidos | Fantini Confeitaria";
+  const acao = el.dataset.acao;
+  if (acao === "visto") return;
+  if (acao === "imprimir") return imprimir(pedidos.find(p => p.id === id));
+  el.disabled = true;
+  try {
+    if (acao === "avancar") await mudar(id, {status: el.dataset.status});
+    if (acao === "sincronizar"){
+      const j = await api({acao:"sincronizar", id});
+      substituir(j.pedido);
+      aviso(`Pagamento de ${id}: ${j.pedido.pagamentoStatus}`);
+    }
+  } catch (err) { aviso(err.message); el.disabled = false; }
+});
+
+$("#lista").addEventListener("change", async e => {
+  const el = e.target.closest("select[data-acao]");
+  if (!el || !el.value) return;
+  const id = el.closest("[data-id]").dataset.id;
+  const valor = el.value;
+  if (valor === "Cancelado" && !confirm(`Cancelar o pedido ${id}?`)){ el.value = ""; return; }
+  el.disabled = true;
+  try {
+    await mudar(id, el.dataset.acao === "status" ? {status: valor} : {pagamentoStatus: valor});
+  } catch (err) { aviso(err.message); el.disabled = false; el.value = ""; }
+});
+
+async function mudar(id, campos){
+  const j = await api({acao:"atualizarPedido", id, ...campos});
+  substituir(j.pedido);
+  aviso(`Pedido ${id} atualizado`);
+}
+function substituir(p){
+  const i = pedidos.findIndex(x => x.id === p.id);
+  if (i >= 0) pedidos[i] = p;
+  render();
+}
+
+function imprimir(p){
+  const w = window.open("", "_blank", "width=380,height=640");
+  if (!w){ aviso("Libere as janelas pop-up para imprimir."); return; }
+  const linhas = p.tipo === "encomenda"
+    ? `<p><b>Retirada:</b> ${esc(p.retirada)}</p><p>${esc(p.detalhes)}</p>`
+    : (p.itens || []).map(i => `<tr><td>${i.qtd}x ${esc(i.nome)}</td><td style="text-align:right">${moeda(i.subtotal)}</td></tr>`).join("") +
+      (p.taxaEntrega ? `<tr><td>Taxa de entrega</td><td style="text-align:right">${moeda(p.taxaEntrega)}</td></tr>` : "");
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>${esc(p.id)}</title>
+    <style>body{font-family:monospace;font-size:13px;width:280px;margin:10px}h1{font-size:18px;margin:0 0 4px}table{width:100%;border-collapse:collapse}td{padding:2px 0}hr{border:0;border-top:1px dashed #000}</style></head>
+    <body><h1>${esc(CONFIG.nomeLoja)}</h1><p>Pedido <b>${esc(p.id)}</b><br>${esc(p.criadoEm)}</p><hr>
+    <p><b>${esc(p.nome)}</b><br>${esc(formatarTelefone(p.telefone))}<br>${esc(p.recebimento)}${p.endereco ? "<br>" + esc(p.endereco) : ""}</p><hr>
+    ${p.tipo === "encomenda" ? linhas : `<table>${linhas}</table>`}<hr>
+    <p><b>Total: ${moeda(p.total)}</b><br>Pagamento: ${esc(p.pagamento)} (${esc(p.pagamentoStatus)})</p>
+    ${p.obs ? `<p>Obs.: ${esc(p.obs)}</p>` : ""}
+    <script>window.onload=()=>{window.print();}<\/script></body></html>`);
+  w.document.close();
+}
+
+/* ---------------- Entrada automática ---------------- */
+try {
+  const salvo = sessionStorage.getItem("fantini_admin");
+  if (salvo){ senha = salvo; entrar(); }
+} catch(e){}
+</script>
+</body>
+</html>
