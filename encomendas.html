@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<title>Encomendas | Fantini Confeitaria</title>
+<meta content="Bolos de festa sob encomenda na Fantini Confeitaria, em Belo Horizonte. Monte o seu e receba o orçamento pelo WhatsApp." name="description"/>
+<meta content="#FAF6F1" name="theme-color"/>
+<meta content="Encomendas | Fantini Confeitaria" property="og:title"/>
+<meta content="Bolos de festa sob encomenda na Fantini Confeitaria, em Belo Horizonte. Monte o seu e receba o orçamento pelo WhatsApp." property="og:description"/>
+<meta content="pt_BR" property="og:locale"/>
+<link href="img/favicon.png" rel="icon" type="image/png"/>
+<link href="img/apple-touch-icon.png" rel="apple-touch-icon"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&amp;family=Jost:wght@300;400;500&amp;display=swap" rel="stylesheet"/>
+<link href="assets/estilo.css?v=20261110b" rel="stylesheet"/>
+</head>
+<body data-pagina="encomendas">
+<div id="topo-site"></div>
+<main>
+<header class="cabecalho-pagina areia">
+<div class="container">
+<nav aria-label="Você está em" class="trilha"><a href="index.html">Início</a><i class="sep">/</i><span class="atual">Encomendas</span></nav>
+<h1 data-texto="enc_titulo">Sua festa, <em>do seu jeito</em></h1>
+<p data-texto="enc_subtitulo">Bolo decorado, bento cake ou Kit Festa completo. Escolha os detalhes e nossa equipe envia o orçamento pelo WhatsApp.</p>
+</div>
+</header>
+<section class="secao">
+<div class="container encomenda-grade">
+<div>
+<h2 data-texto="enc_como_titulo">Como <em>funciona</em></h2>
+<ol class="passos">
+<li><div><strong data-texto="enc_passo1_titulo">Escolha os detalhes</strong><span data-texto="enc_passo1_texto">O tipo de encomenda, o tamanho, até dois recheios e o topo.</span></div></li>
+<li><div><strong data-texto="enc_passo2_titulo">Receba o orçamento</strong><span data-texto="enc_passo2_texto">Enviamos o valor e confirmamos a data pelo WhatsApp.</span></div></li>
+<li><div><strong data-texto="enc_passo3_titulo">Confirme a encomenda</strong><span data-texto="enc_passo3_texto">Com 50% de entrada por Pix ou cartão de crédito, sua encomenda entra na agenda. O restante é pago na entrega.</span></div></li>
+</ol>
+</div>
+<form class="form-encomenda" id="formEncomenda" novalidate="">
+<div class="campos">
+<fieldset class="campo inteiro"><legend>O que você quer encomendar?</legend>
+<div class="opcoes tipos">
+<label><input checked="" name="encTipo" type="radio" value="bolo"/> Bolo decorado</label>
+<label><input name="encTipo" type="radio" value="bento"/> Bento cake</label>
+<label><input name="encTipo" type="radio" value="kit"/> Kit Festa</label>
+</div>
+</fieldset>
+<div class="campo"><label for="encNome">Seu nome</label><input autocomplete="name" id="encNome" required=""/></div>
+<div class="campo"><label for="encTelefone">WhatsApp com DDD</label><input autocomplete="tel" id="encTelefone" inputmode="tel" placeholder="(31) 99999-9999" required="" type="tel"/></div>
+<div class="campo inteiro" id="campoTamanho"><label for="encTamanho">Tamanho</label><select id="encTamanho"></select></div>
+<div class="campo inteiro" hidden="" id="campoKit"><label for="encKit">Kit</label><select id="encKit"></select></div>
+<fieldset class="campo inteiro" id="campoRecheios"><legend>Recheios <span class="ajuda">(até 2)</span></legend>
+<p class="grupo-titulo">Tradicionais</p>
+<div class="opcoes" id="encRecheiosTrad"></div>
+<div id="grupoEspeciais">
+<p class="grupo-titulo" style="margin-top:16px">Especiais</p>
+<div class="opcoes" id="encRecheiosEsp"></div>
+</div>
+<p class="nota" hidden="" id="notaKit">No Kit Festa, recheios e docinhos são tradicionais. Para sabores especiais, fale com a gente pelo WhatsApp.</p>
+</fieldset>
+<fieldset class="campo inteiro" hidden="" id="campoDoces"><legend>Docinhos</legend><div class="opcoes" id="encDoces"></div></fieldset>
+<div class="campo inteiro" id="campoTopo"><label for="encTopo">Topo de bolo</label><select id="encTopo"></select><span class="ajuda">O topo de bolo tem valor à parte.</span></div>
+<div class="campo"><label for="encData">Data de retirada</label><input id="encData" required="" type="date"/><span class="ajuda" id="ajudaData"></span></div>
+<div class="campo"><label for="encHora">Horário</label><input id="encHora" required="" type="time" value="10:00"/></div>
+<div class="campo inteiro"><label for="encFrase">Escrita no bolo <span class="ajuda">(opcional)</span></label><input id="encFrase" maxlength="40" placeholder="Ex.: Feliz aniversário, Ana"/></div>
+<fieldset class="campo inteiro"><legend>Forma de pagamento</legend>
+<div class="opcoes">
+<label><input checked="" name="encPagamento" type="radio" value="Pix"/> Pix</label>
+<label><input name="encPagamento" type="radio" value="Cartão de crédito"/> Cartão de crédito</label>
+</div>
+</fieldset>
+<div class="campo inteiro"><label for="encObs">Observações <span class="ajuda">(opcional)</span></label><textarea id="encObs" placeholder="Tema da festa, cores, referências…"></textarea></div>
+</div>
+<div class="form-rodape">
+<small data-texto="enc_form_nota">O orçamento é enviado pelo WhatsApp, junto com a confirmação da data.</small>
+<button class="btn btn-escuro" data-texto="enc_form_botao" type="submit">Solicitar orçamento</button>
+</div>
+<p class="erro" id="encErro" role="alert"></p>
+</form>
+</div>
+</section>
+<section class="secao secao-galeria" id="galeria" style="padding-top:0">
+    <div class="container">
+      <div class="secao-topo"><h2 data-texto="galeria_titulo">Feito na <em>Fantini</em></h2><p data-texto="galeria_texto">Alguns dos bolos e doces que já saíram da nossa cozinha.</p><span class="ornamento"></span></div>
+      <div class="galeria" data-galeria></div>
+    </div>
+  </section>
+
+  <section class="secao gourmet-destaque" id="duvidas">
+<div class="container">
+<div class="secao-topo"><h2 data-texto="enc_faq_titulo">Dúvidas <em>frequentes</em></h2><span class="ornamento"></span></div>
+<div class="faq">
+<details><summary data-texto="enc_faq1_pergunta">Com quanto tempo de antecedência devo encomendar?</summary><p data-texto="enc_faq1_resposta">Pedimos pelo menos {dias} dias de antecedência. Para bolos com decoração temática e Kit Festa, o ideal é encomendar com uma semana.</p></details>
+<details><summary data-texto="enc_faq2_pergunta">Como recebo os valores?</summary><p data-texto="enc_faq2_resposta">Assim que recebemos seu pedido ou encomenda, nossa equipe envia os valores e a disponibilidade pelo WhatsApp.</p></details>
+<details><summary data-texto="enc_faq3_pergunta">Quais são as formas de pagamento?</summary><p data-texto="enc_faq3_resposta">Pix ou cartão de crédito. Não há pagamento pelo site: depois do seu pedido, combinamos tudo pelo WhatsApp. Nas encomendas, trabalhamos com 50% do valor de entrada e o restante na entrega.</p></details>
+<details><summary data-texto="enc_faq4_pergunta">O topo de bolo está incluso?</summary><p data-texto="enc_faq4_resposta">O topo de bolo tem valor à parte. No Kit Festa, o topo simples já está incluso.</p></details>
+<details><summary data-texto="enc_faq5_pergunta">Qual a diferença entre tradicional e especial?</summary><p data-texto="enc_faq5_resposta">Os tradicionais são os nossos clássicos, como Ninho, Brigadeiro e Moranguinho. Os especiais levam sabores como Ferrero Rocher, Ouro Branco, Nozes e Ninho com Nutella.</p></details>
+<details><summary data-texto="enc_faq6_pergunta">Quantas pessoas cada bolo serve?</summary><p data-texto="enc_faq6_resposta">Nossos bolos decorados vão de 10 a 15 fatias até cerca de 50 fatias. Na dúvida, conte quantos convidados terá a festa que a gente ajuda a escolher.</p></details>
+</div>
+</div>
+</section>
+</main>
+<div id="rodape-site"></div>
+<script src="assets/dados.js?v=20261110b"></script>
+<script src="assets/site.js?v=20261110b"></script>
+</body>
+</html>

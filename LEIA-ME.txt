@@ -1,0 +1,51 @@
+FANTINI CONFEITARIA — SITE
+==========================
+
+O QUE TEM NESTA PASTA
+- index.html, produtos.html, encomendas.html, sobre.html -> páginas do site
+- assets/dados.js  -> TODO o conteúdo editável: loja, horários, linhas,
+                      produtos, banners, galeria, textos e opções de encomenda
+- assets/estilo.css -> visual do site
+- assets/site.js    -> funcionamento (não precisa mexer)
+- img/              -> fotos do site
+- video/            -> vídeos da galeria
+
+COMO FUNCIONA
+- O cliente monta a seleção de produtos ou preenche o formulário de
+  encomenda e clica em "Enviar pelo WhatsApp". A mensagem já sai pronta
+  no WhatsApp da loja, e o atendente finaliza o pedido e o pagamento
+  (Pix ou cartão). O site não mostra preços e não cobra.
+- O site é feito só de arquivos: não usa banco de dados nem painel.
+  Funciona em qualquer hospedagem (cPanel, Netlify etc.).
+
+
+-------------------------------------------------------------
+COLOCAR NO AR (cPanel)
+-------------------------------------------------------------
+1. cPanel > Gerenciador de Arquivos > public_html.
+2. Envie o arquivo subir-no-cpanel.zip, clique com o botão direito > Extrair.
+3. Confira que index.html, assets, img e video ficaram direto dentro de
+   public_html (e não numa subpasta). Apague o .zip.
+4. Ative o SSL (https) no cPanel, em "SSL/TLS Status" ou "Let's Encrypt".
+
+
+-------------------------------------------------------------
+EDITAR O CONTEÚDO
+-------------------------------------------------------------
+Tudo fica em assets/dados.js (abre em qualquer editor de texto).
+- CONFIG: nome, WhatsApp, endereço, Instagram, horários, prazo de encomenda
+- CATEGORIAS: as linhas de produtos (nome, foto de capa, descrição)
+- PRODUTOS: cada produto (nome, linha, descrição, foto, sabores)
+- BANNERS: os banners da página inicial (inclui o mosaico de 4 fotos)
+- GALERIA: fotos e vídeos da seção "Feito na Fantini"
+- TEXTOS: os textos das páginas
+- ENCOMENDA: tamanhos, kits e sabores do formulário de encomenda
+
+Para trocar uma foto: envie a foto nova para a pasta img e troque o nome
+do arquivo no produto. Fotos verticais (4:5) ficam melhores nos cartões.
+
+Depois de editar, envie o dados.js de novo para public_html/assets.
+Se o navegador mostrar a versão antiga, aperte Ctrl + F5.
+
+Se a empresa contratada for criar um painel de controle, ela pode usar
+o assets/dados.js como base: ele já reúne todo o conteúdo do site.
